@@ -1,0 +1,30 @@
+银行家算法的思路
+
+1. 在安全状态下收到进程的资源请求后，先把资源试探性分配给它。
+2. 在进程集合中找到剩余资源能满足其需求量的进程，保证这个进程运行完毕并归还全部资源。
+3. 把这个进程从集合中去掉，剩余资源更多了，反复执行上述步骤。
+4. 检查进程集合，若为空表明系统处于安全状态，实施本次分配。
+5. 否则，有进程执行不完，系统处于不安全状态，本次资源分配暂不实施，申请进程等待。
+
+
+算法流程
+(1)若request[i,j]>need[i,j]，报错并中止进程的执行。
+(2)若request[i,j]>available[j]，Pi进入等待资源状态，转进程调度。
+(3)假设Pi的申请被满足，修改系统状态：
+    available[j]= available[j] - request[i,j]
+    allocation[i,j]= allocation[i,j] +request[i,j]
+    need[i,j]= need[i,j] -request[i,j]
+(4)调用安全状态检查算法
+(5)若结果为安全状态，返回调用者。否则，恢复系统状态，Pi进入等待资源状态，转进程调度。
+    available[j]=available[j]+request[i,j] 
+    allocation[i,j]=allocation[i,j]-request[i,j]
+    need[i,j]=need[i,j]+request[i,j]
+
+
+安全状态检查算法流程
+work[m]：系统提供给进程继续运行所需的资源数
+finish[n]：记录每个进程已获得足够资源可以执行完毕
+（1）work[j]= available[j] ，finish[i]= false
+（2）寻找 x∈N，满足finish[x] = false，且need[x,j] ≤ work[j]，若不存在这样的x，则转(4)；
+（3）work[j]=work[j]+ allocation[x,j] ，finish[x]= true，转(2)
+（4）若对所有的x，finish[x]=true，则返回安全状态，否则返回不安全状态
