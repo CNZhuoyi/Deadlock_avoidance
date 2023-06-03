@@ -35,7 +35,6 @@ void DataSet() {
 		cout << "资源 R" << i + 1 << ": ";
 		cin >> available[i];
 	}
-
 	cout << "请依次输入每个进程的分配和最大需求资源量：" << endl;
 	for (int i = 0; i < n; i++) {
 		cout << "进程 P" << i + 1 << ":" << endl;
@@ -82,7 +81,7 @@ void BankersAlgorithm() {
 		cin >> request[temp][i];
 	}
 	for (int i = 0; i < m; i++) {
-		if (request[temp][i] > need[temp - 1][i]) {
+		if (request[temp][i] > need[temp][i]) {
 			cout << "错误，进程请求量大于需求量!" << endl;
 			system("pause");
 			system("cls");
